@@ -29,6 +29,7 @@ const db = require('./db');
 const crawl = require('./crawler');
 
 (async () => {
+  await db.connect();
   if (!argv.resume) {
     await db.flush();
   }

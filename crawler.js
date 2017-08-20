@@ -10,7 +10,7 @@ const debug = {
 
 const crawl = async (entry, options = {}) => {
   debug.crawl('Crawler started');
-  let target = (await db.getCrawlUrl()) || { url: entry, radius: 0 };
+  let target = (await db.popUrl()) || { url: entry, radius: 0 };
   const { maxRadius = Infinity } = options;
   if (!target.url) {
     debug.crawl('Nothing to crawl');
@@ -36,17 +36,23 @@ const crawl = async (entry, options = {}) => {
           link => link.href
         );
       });
-      const urls = _.chain(links)
+      const outboundUrls = _.chain(links)
         .filter(link => {
           return url.parse(link).host === entryUrl.host;
         })
         .value();
-      debug.page(`Scraped ${urls.length} urls`);
-      await db.addCrawlUrls(urls, ++target.radius);
+      debug.page(`Scraped ${outboundUrls.length} urls`);
+      await db.store({
+        outboundUrls,
+        radius: ++target.radius,
+        url: target.url,
+      });
     }
-    target = await db.getCrawlUrl();
+    target = await db.popUrl();
   }
   debug.crawl(`Crawler finished after crawling ${count} pages`);
+
+  await db.getNodes();
 
   browser.close();
 };
