@@ -2,7 +2,7 @@
 
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
-This crawler does a BFS starting from a given site entry point. It will not leave the entry point domain and it will not crawl a page more than once. Given a shared redis host/cluster this crawler can be distributed across multiple machines or processes.
+This crawler does a BFS starting from a given site entry point. It will not leave the entry point domain and it will not crawl a page more than once. Given a shared redis host/cluster this crawler can be distributed across multiple machines or processes. Discovered pages will be stored in mongo collection, each with a url, outbound urls, and a radius from the origin.
 
 ## Installation
 ```
