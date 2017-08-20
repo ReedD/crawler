@@ -22,9 +22,12 @@ module.exports = {
   store: async page => {
     debug.db(`Store page ${page.url}`);
 
-    debug.mongo('Add page to mongo');
-    await this.db.collection('pages').insertOne(page);
-    debug.mongo('Mongo save complete');
+    // We don't need to wait for this
+    (async () => {
+      debug.mongo('Add page to mongo');
+      await this.db.collection('pages').insertOne(page);
+      debug.mongo('Mongo save complete');
+    })();
 
     debug.redis('Add scraped urls to redis');
     const multi = this.client.multi();
