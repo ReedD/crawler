@@ -52,8 +52,6 @@ const crawl = async (entry, options = {}) => {
   }
   debug.crawl(`Crawler finished after crawling ${count} pages`);
 
-  await db.getNodes();
-
   browser.close();
 };
 
