@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+require('dotenv').config();
+const argv = require('yargs')
+  .usage('Usage: $0 [options]')
+  .option('url', {
+    alias: 'u',
+    describe: 'The URL the crawler should enter the site from',
+  })
+  .option('resume', {
+    alias: 'r',
+    boolean: true,
+    describe: 'Resume crawler from existing queue',
+  })
+  .option('max-radius', {
+    alias: 'm',
+    number: true,
+    describe: 'The maximum radius from the entry URL to crawl',
+    default: Infinity,
+  })
+  .check(({ url, resume }) => {
+    if (url && resume) {
+      throw new Error('--url and --resume are mutually exclusive');
+    }
+    return true;
+  })
+  .help().argv;
+
+const db = require('./db');
+const crawl = require('./crawler');
+
+(async () => {
+  if (!argv.resume) {
+    await db.flush();
+  }
+  await crawl(argv.url, { maxRadius: argv.maxRadius });
+  db.close();
+})();
