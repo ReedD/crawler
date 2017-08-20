@@ -10,11 +10,11 @@ yarn
 ```
 
 ## Usage
-### Basic usage
+### Basic
 ```bash
 ./crawl -u https://www.dadoune.com
 ```
-### Distributed usage
+### Distributed
 ```bash
 # Terminal 1
 ./crawl -u https://www.dadoune.com
@@ -23,6 +23,10 @@ yarn
 ```bash
 # Terminal 2
 ./crawl -r
+```
+### Debug
+```bash
+DEBUG=crawler:* ./crawl -u https://www.dadoune.com
 ```
 
 ### Options
